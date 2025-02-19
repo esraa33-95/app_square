@@ -15,6 +15,7 @@ class AuthController extends Controller
     
     public function __construct(private AuthService $authService) {
     }
+    //task1
     public function register(RegisterRequest $request)
     {
         $this->authService->register($request->validated());
@@ -23,7 +24,7 @@ class AuthController extends Controller
     }
 
    
-    
+    //task1
   public function login(LoginRequest $request)
   {
     $data = $this->authService->login($request->validated());
@@ -31,6 +32,7 @@ class AuthController extends Controller
    
   }
 
+  //task1
   public function logout()
 {
   $data = $this->authService->logout();
