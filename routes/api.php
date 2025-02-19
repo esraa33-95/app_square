@@ -9,16 +9,15 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-
+//task1
 Route::controller(AuthController::class)->group(function () {
     Route::post('auth/register', 'register');
     Route::post('auth/login', 'login');
     Route::post('auth/logout', 'logout');
 });
 
-Route::post('send-otp', [VerificationCodeController::class, 'sendOTP']);
 
-
+//task2
 Route::group([
     'controller'=>ProductController::class,
 ],function(){
