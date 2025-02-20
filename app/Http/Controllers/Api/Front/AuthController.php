@@ -37,8 +37,11 @@ class AuthController extends Controller
 {
   $data = $this->authService->logout();
 
-  return $this->responseApi(__('user logout successfully'));
+  return $this->responseApi(__('user logout successfully'),$data);
 }
+
+
+
 
 
 }
