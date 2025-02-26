@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Password;
+
 
 class AuthService
 {
@@ -50,27 +52,30 @@ class AuthService
     }
 
     
-    public function login(array $credentials)
-{
-    $user = User::where('email', $credentials['email'])->first();
+   
 
-    if (!$user || !Hash::check($credentials['password'], $user->password)) {
+public function login(array $credentials, Manager $fractal)
+{
+    if (!Auth::attempt($credentials)) {
         throw ValidationException::withMessages([
             'email' => ['The provided credentials are incorrect.'],
         ]);
     }
 
-        $fractal = new Manager();
-        $resource = new Item($user, new UserTransform());
-        $transformedUser = $fractal->createData($resource)->toArray();
+    $user = Auth::user();
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+    $resource = new Item($user, new UserTransform());
+    $transformedUser = $fractal->createData($resource)->toArray();
 
-        return response()->json([
-            'user' => $transformedUser,
-            'token' => $token,
-        ]);
+   
+    $token = $user->createtoken('auth_token')->plainTextToken;
+
+    return response()->json([
+        'user' => $transformedUser,
+        'token' => $token,
+    ], 200);
 }
+
 
 public function logout(): array
 {
@@ -96,5 +101,44 @@ public function logout(): array
 }
 
 
+public function sendResetLink(array $data)
+{
+    $status = Password::sendResetLink($data);
 
+    if ($status === Password::RESET_LINK_SENT) {
+        return response()->json([
+            'message' => __('Password reset link  successfully.')
+        ], 200);
+    } 
+
+    return response()->json([
+        'message' => __('Error sending reset link.'),
+        'error' => __($status) 
+    ], 400);
+}
+
+
+
+public function resetPassword(array $data)
+{
+    $status = Password::reset(
+        $data,
+        function ($user, $password) {
+            $user->forceFill([
+                'password' => Hash::make($password) 
+            ])->save();
+        }
+    );
+
+    if ($status === Password::PASSWORD_RESET) {
+        return response()->json([
+            'message' => __('Password  reset successfully.')
+        ], 200);
+    } 
+
+    return response()->json([
+        'message' => __('Invalid '),
+        'error' => __($status) 
+    ], 400);
+}
 }

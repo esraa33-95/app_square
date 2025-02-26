@@ -5,18 +5,22 @@ namespace App\Http\Controllers\Api\Front;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Front\User\LoginRequest;
 use App\Http\Requests\Api\Front\User\RegisterRequest;
+use App\Http\Requests\Api\Front\User\ResetpasswordRequest;
+use App\Http\Requests\Api\Front\User\SendLinkRequest;
 use App\Http\Traits\Response;
 use App\Services\Front\AuthService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Facades\Validator;
+use League\Fractal\Manager;
 
 
 class AuthController extends Controller
 {
     use Response;
     
-    public function __construct(private AuthService $authService) {
+    public function __construct(private AuthService $authService, private Manager $fractal) {
     }
     //task1
     public function register(RegisterRequest $request)
@@ -30,7 +34,7 @@ class AuthController extends Controller
     //task1
   public function login(LoginRequest $request)
   {
-    $data = $this->authService->login($request->validated());
+    $data = $this->authService->login($request->validated(), $this->fractal);
     return $data;
    
   }
@@ -45,25 +49,23 @@ class AuthController extends Controller
 
 //forgetpassword
 
-public function sendResetLink(Request $request)
+public function sendResetLink(SendLinkRequest $request)
 {
-   set_time_limit(300);
+   $data = $request->validated();
 
-    $validator = Validator::make($request->all(), [
-        'email' => 'required|email|exists:users,email',
-    ]);
+    $data = $this->authService->sendResetLink($data);
 
-    if ($validator->fails()) {
-        return response()->json(['status' => false, 'message' => $validator->errors()], 422);
-    }
-
-    $status = Password::sendResetLink($request->only('email'));
-
-    return $status === Password::RESET_LINK_SENT
-        ? response()->json(['status' => true, 'message' => 'Password reset link sent to your email.'])
-        : response()->json(['status' => false, 'message' => 'Unable to send reset link.'], 500);
 }
 
+//reset password
 
+public function resetPassword(ResetpasswordRequest $request)
+    {
+        $data = $request->validated();
+
+        $data = $this->authService->resetPassword($data);
+
+      
+    }
 
 }
