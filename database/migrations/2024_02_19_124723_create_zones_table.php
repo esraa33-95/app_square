@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('zones', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('area_id')->constrained('areas')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -6,17 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Area extends Model
 {
-    protected $fillable = [
-        'name',
-];
+    protected $fillable = ['name', 'zone_id']; 
 
-public function zone()
+    public function zone()
     {
-        return $this->hasMany(Zone::class);
+        return $this->belongsTo(Zone::class, 'zone_id'); 
     }
 
 public function location()
     {
         return $this->hasMany(Location::class);
     }
+
+    
 }
