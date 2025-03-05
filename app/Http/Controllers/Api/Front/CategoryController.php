@@ -3,31 +3,27 @@
 namespace App\Http\Controllers\Api\Front;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\Api\Front\Project\CategoryRequest;
+use App\Services\Front\CategoryService;
 use App\Http\Traits\Response;
 use App\Http\Traits\Common;
-use App\Http\Requests\Api\Front\Project\ProductRequest;
-use App\Services\Front\ProductService;
+use Illuminate\Http\Request;
 
-
-
-class ProductController extends Controller
+class CategoryController extends Controller
 {
     use Response;
     use Common;
     /**
      * Display a listing of the resource.
      */
-
-     public function __construct(private ProductService $productService) {
+    public function __construct(private CategoryService $categoryService) {
     }
     public function index()
     {
-        $data = $this->productService->index();
-        return $this->responseApi(__('products show successfully'), $data);
+        $data = $this->categoryService->index();
+        return $this->responseApi(__('categories show successfully'), $data);
     }
-        
-   
+
     /**
      * Show the form for creating a new resource.
      */
@@ -39,14 +35,11 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    
-     public function store(ProductRequest $request)
-     {
-         $data = $this->productService->store($request);
-         return $data;
-     }
- 
-
+    public function store(CategoryRequest $request)
+    {
+        $data = $this->categoryService->store($request);
+        return $data;
+    }
     /**
      * Display the specified resource.
      */

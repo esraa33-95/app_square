@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api\Front\Project;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LocationRequest extends FormRequest
+class CategoryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +22,8 @@ class LocationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id'=>'required|exists:users,id', 
-            'zone_id'=>'required|exists:zones,id', 
-            'area_id'=>'required|exists:areas,id',
+            'name'=>'required|string',
+            'image' =>'nullable|mimes:png,jpg,jpeg',
         ];
     }
 }
