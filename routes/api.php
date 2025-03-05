@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Front\AuthController;
 use App\Http\Controllers\Api\Front\ProductController;
 use App\Http\Controllers\Api\Front\ZoneController;
 use App\Http\Controllers\Api\Front\AreaController;
+use App\Http\Controllers\Api\Front\CartController;
 use App\Http\Controllers\Api\Front\CategoryController;
 use App\Http\Controllers\Api\Front\LocationController;
 
@@ -22,7 +23,9 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('auth/reset-password', 'resetPassword');
 });
 
-//category
+
+Route::middleware(['auth:sanctum'])->group(function () {
+ //category
 Route::group([
     'controller'=>CategoryController::class,
 ],function(){
@@ -31,9 +34,7 @@ Route::post('categories/store', 'store');
 
  });
 
-
-
-//task2
+//product
 Route::group([
     'controller'=>ProductController::class,
 ],function(){
@@ -42,9 +43,7 @@ Route::post('products/store', 'store');
 
  });
 
-
  //zone
-
  Route::group([
     'controller'=>ZoneController::class,
 ],function(){
@@ -52,7 +51,6 @@ Route::get('zones/index','index');
 Route::post('zones/store', 'store');
 Route::get('zones/{zoneId}',  'showAreasByZone');
  });
-
 
 //area
  Route::group([
@@ -70,3 +68,16 @@ Route::post('area/store', 'store');
 Route::post('location/store', 'store');
 
  });
+
+ //cart
+ Route::group([
+    'controller'=>CartController::class,
+    
+],function(){
+Route::post('add/{productId}','addToCart');
+Route::get('cart', 'getCart');
+Route::delete('remove/{productId}', 'removefromcart');
+
+ });
+});
+  
