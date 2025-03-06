@@ -30,4 +30,9 @@ class Product extends Model implements HasMedia
                     ->withPivot('quantity')
                     ->withTimestamps();
     }
+
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class,'order_products')->withPivot('quantity');
+    }
 }

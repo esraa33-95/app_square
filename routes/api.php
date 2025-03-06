@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Front\AreaController;
 use App\Http\Controllers\Api\Front\CartController;
 use App\Http\Controllers\Api\Front\CategoryController;
 use App\Http\Controllers\Api\Front\LocationController;
+use App\Http\Controllers\Api\Front\OrderController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -77,6 +78,18 @@ Route::post('location/store', 'store');
 Route::post('add/{productId}','addToCart');
 Route::get('cart', 'getCart');
 Route::delete('remove/{productId}', 'removefromcart');
+
+ });
+
+
+
+ Route::group([
+    'controller'=>OrderController::class,
+    
+],function(){
+Route::post('order/{userId}','createOrder');
+
+
 
  });
 });
