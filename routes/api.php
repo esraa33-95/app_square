@@ -32,6 +32,7 @@ Route::group([
 ],function(){
 Route::get('categories/index','index');
 Route::post('categories/store', 'store');
+Route::post('categories/{id}',  'update');
 
  });
 

@@ -24,6 +24,7 @@ class CategoryService
         {
             return $this->responseApi(__('invalid'), 404);
         }
+
        return
         fractal()->collection($category)
         ->transformWith(new CategoryTransform())
@@ -37,19 +38,37 @@ class CategoryService
 {
     $category = $request->validated();
 
-   
     $category= Category::create($category);
-
-    
+ 
     if ($request->hasFile('image')) {
         $category->addMedia($request->file('image'))
                 ->toMediaCollection('image'); 
     }
 
-    return $this->responseApi(__('Product stored successfully'), new CategoryTransform($category));
+    return $this->responseApi(__('Product stored successfully'),new CategoryTransform($category));
 }
 
+public function update(CategoryRequest $request, $id)
+{
+   
+    $category = Category::find($id);
 
+    if (!$category) {
+        return response()->json(['message' => 'Category not found'], 404);
+    }
+
+   
+    $validatedData = $request->validated();
+    $category->update($validatedData);
+
+   
+    if ($request->hasFile('image')) {
+        $category->clearMediaCollection('image');
+        $category->addMedia($request->file('image'))->toMediaCollection('image');
+    }
+
+    return $category;
+}
 
 
 

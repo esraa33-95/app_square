@@ -7,7 +7,7 @@ use App\Http\Requests\Api\Front\Project\CategoryRequest;
 use App\Services\Front\CategoryService;
 use App\Http\Traits\Response;
 use App\Http\Traits\Common;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class CategoryController extends Controller
 {
@@ -59,9 +59,14 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CategoryRequest $request, $id): JsonResponse
     {
-        //
+        $category = $this->categoryService->update($request, $id);
+
+        return response()->json([
+            'message' => 'Category updated successfully',
+            'category' => $category
+        ]);
     }
 
     /**
