@@ -25,7 +25,7 @@ class CartController extends Controller
     {
 
         $data = $this->cartService->removefromcart($productId); 
-        return $this->responseApi(__('product delete successfully'), $data); 
+        return $this->responseApi(__('product delete successfully'),$data); 
     }
 
   

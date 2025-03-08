@@ -88,8 +88,8 @@ Route::delete('remove/{productId}', 'removefromcart');
     
 ],function(){
 Route::post('order/{userId}','createOrder');
-
-
+Route::delete('delete/{id}', 'cancelOrder');
+Route::get('orders', 'getUserOrders');
 
  });
 });

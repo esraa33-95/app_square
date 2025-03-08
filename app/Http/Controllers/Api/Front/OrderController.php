@@ -25,4 +25,21 @@ class OrderController extends Controller
 
     }
 
+    public function cancelOrder($id)
+    {
+
+        $data = $this->orderService->cancelOrder($id);
+        return $this->responseApi(__('order delete successfully')); 
+        
+    }
+
+    public function getUserOrders(Request $request)
+    {
+       $data =  $this->orderService->getUserOrders($request);
+        return $this->responseApi(__('show order successfully'),$data); 
+
+    }
+
+
+
 }

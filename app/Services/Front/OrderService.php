@@ -32,6 +32,7 @@ class OrderService
         ]);
 
         $totalPrice = 0;
+
         foreach ($request->products as $productData) {
             $product = Product::findOrFail($productData['id']);
             $quantity = $productData['quantity'];
@@ -47,7 +48,33 @@ class OrderService
         ], 201);
     }
 
+    public function cancelOrder($id)
+    {
+        
+        $order = Order::find($id);
+
+       
+        if (!$order) 
+        {
+            return response()->json(['message' => 'Order not found'], 404);
+        }
+
+        $order->delete();
+
+        return response()->json(['message' => 'Order canceled successfully'], 200);
+    }
+
+    public function getUserOrders(Request $request)
+    {
+        $user = $request->user(); 
+
+         $orders = Order::where('user_id', $user->id)->with('products')->get();
+
+        return response()->json($orders, 200);
+    }
 
 
+
+    
 
 }
