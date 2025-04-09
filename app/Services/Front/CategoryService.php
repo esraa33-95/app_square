@@ -29,7 +29,6 @@ class CategoryService
         fractal()->collection($category)
         ->transformWith(new CategoryTransform())
         ->toArray();
-
        
     }
 

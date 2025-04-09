@@ -69,4 +69,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class);
     }
+
+    public function Profile()
+    {
+        return $this->morphOne(Profile::class,'profileable');
+    }
 }

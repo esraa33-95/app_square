@@ -51,7 +51,32 @@ class ProductService
     return $this->responseApi(__('Product stored successfully'), new ProductTransform($product));
 }
 
+public function update(ProductRequest $request, $id)
+    {
+        
+        $product = Product::find($id);
 
+        if (!$product) {
+            return response()->json(['message' => 'Product not found'], 404);
+        }
+
+       
+        $validatedData = $request->validated();
+        $product->update($validatedData);
+
+       
+        if ($request->hasFile('image')) {
+            
+            $product->clearMediaCollection('image');
+            
+           
+            $product->addMedia($request->file('image'))
+                    ->toMediaCollection('image');
+        }
+
+       
+        return $this->responseApi(__('Product updated successfully'), new ProductTransform($product));
+    }
 
 
 

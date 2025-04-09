@@ -24,11 +24,12 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('auth/reset-password', 'resetPassword');
 });
 
-
-Route::middleware(['auth:sanctum'])->group(function () {
+//custom global header
+Route::middleware(['auth:sanctum','custom-header'])->group(function () {
  //category
 Route::group([
     'controller'=>CategoryController::class,
+   
 ],function(){
 Route::get('categories/index','index');
 Route::post('categories/store', 'store');
@@ -42,7 +43,7 @@ Route::group([
 ],function(){
 Route::get('products/index','index');
 Route::post('products/store', 'store');
-
+Route::post('products/{id}',  'update');
  });
 
  //zone
